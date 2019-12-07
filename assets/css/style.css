@@ -16,6 +16,9 @@ body, html {
     width: 100%;
 }
 
+#searchForm {
+    margin-bottom: 15px;
+}
 /* .sidebar {
     background-color: darkolivegreen;
 }

@@ -21,22 +21,19 @@
     <header class="header"><h1>Weather Dashboard</h1></header>
     <div class="container-fluid main">
         <div class="row">
-            <div class="col-2 sidebar">
+            <div class="col-3 sidebar">
                 <div class="search-container">
-                    <form action="/action_page.php">
+                    <form id="searchForm">
                         <input type="text" id="cityInput" placeholder="Search..." name="search">
                         <button type="submit" id="searchButton"><i class="fa fa-search"></i></button>
                     </form>
                     <div class="card">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Cras justo odio</li>
-                            <li class="list-group-item">Dapibus ac facilisis in</li>
-                            <li class="list-group-item">Vestibulum at eros</li>
+                        <ul class="list-group list-group-flush" id="sidebarList">
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-10 weatherpane">
+            <div class="col-9 weatherpane">
                 <div class="row weather">
                     <div class="card weathercard mw-100">
                         <div class="card-body">
