@@ -1,0 +1,31 @@
+body, html {
+    height: 100%;
+  }
+
+.header {
+    text-align: center;
+    background-color: #353942;
+    color: #DDE1E4;
+}
+
+.weather {
+    margin-bottom: 15px;
+}
+
+.weathercard {
+    width: 100%;
+}
+
+/* .sidebar {
+    background-color: darkolivegreen;
+}
+
+
+
+.forecast {
+    background-color: lightseagreen;
+} */
+
+.sidebar {
+    height: 100%;
+}
