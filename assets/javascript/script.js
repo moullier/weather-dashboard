@@ -3,34 +3,41 @@ let cityArray = [];
 
 // inital pull of Tucson info to populate the page
 // later, try to incorporate the geolocator API to this
-$.ajax({
-    url: "https://api.openweathermap.org/data/2.5/weather?q=Tucson&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial",
-    method: "GET"
-}).then(function(response) {
-
-    console.log(response);
-    
-    displayCurrentWeather(response);
-
-});
-
-$.ajax({
-    url: "https://api.openweathermap.org/data/2.5/forecast?q=Tucson&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial",
-    method: "GET"
-}).then(function(response) {
-    
-    display5DayForecast(response);
-
-});
-
+updatePage("Tucson");
 populateSidebar();
+
+// $.ajax({
+//     url: "https://api.openweathermap.org/data/2.5/weather?q=Tucson&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial",
+//     method: "GET"
+// }).then(function(response) {
+
+//     console.log(response);
+    
+//     displayCurrentWeather(response);
+
+// });
+
+// $.ajax({
+//     url: "https://api.openweathermap.org/data/2.5/forecast?q=Tucson&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial",
+//     method: "GET"
+// }).then(function(response) {
+    
+//     display5DayForecast(response);
+
+// });
 
 function displayCurrentWeather(response){
     let city = response.name;
 
+
+    let latitude = response.coord.lat;
+    let longitude = response.coord.lon;
+
+    console.log("latitude = " + latitude + " longitude = " + longitude);
+
+    displayUV(latitude, longitude);
+
     // convert dt to date format
-    console.log(response.dt);
-    console.log(typeof(response.dt));
     let day = moment.unix(response.dt);
     console.log(day.format("MM/DD/YYYY"));
 
@@ -70,6 +77,45 @@ function displayCurrentWeather(response){
     $(".weatherBody").append(newHumidityP);
     $(".weatherBody").append(newWindP);
 
+}
+
+function displayUV(latitude, longitude) {
+        // construct URL for UV API request
+        let UVQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial";
+    
+        // send request for current weather data
+        $.ajax({
+            url: UVQueryURL,
+            method: "GET"
+        }).then(function(response) {
+    
+            console.log("Yo this is the UV stuff");
+            console.log(response);
+            
+            let newButton = $("<button>");
+            let UVValue = response.value;
+            newButton.addClass("btn");
+
+            if(UVValue >= 0 && UVValue <= 2.5)
+                newButton.css("background-color","green");
+            else if(UVValue > 2.5 && UVValue <= 5.5)
+                newButton.css("background-color","yellow");
+            else if(UVValue > 5.5 && UVValue <= 7.5)
+                newButton.css("background-color","orange");
+            else if(UVValue > 7.5 && UVValue <= 10.5)
+                newButton.css("background-color","red");
+            else
+                newButton.css("background-color","violet");
+                
+                
+
+            newButton.text(UVValue);
+            $(".UVBody").empty();
+            $(".UVBody").text("UV Index: ")
+            $(".UVBody").append(newButton);
+
+        
+        });
 }
 
 function display5DayForecast(response) {
@@ -171,7 +217,8 @@ function updateFromSidebar() {
 }
 
 function updatePage(city) {
-    event.preventDefault();
+    if(event != undefined)
+        event.preventDefault();
 
     // construct URL for current weather API request
     let weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial";
