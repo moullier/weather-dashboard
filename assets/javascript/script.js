@@ -50,6 +50,7 @@ function displayCurrentWeather(response){
 
     // get the temperature, humidity, and wind speed from the response
     let temp = response.main.temp;
+    temp = temp.toFixed(1);
     let humidity = response.main.humidity;
     let wind = response.wind.speed;
 
@@ -73,7 +74,55 @@ function displayCurrentWeather(response){
 
 function display5DayForecast(response) {
 
+    console.log("*****");
     console.log(response);
+
+    for(let i = 0; i < 40; i += 8){
+        console.log(response.list[i]);
+        let day = response.list[i].dt_txt;
+
+        let yr = day.substring(0, 4);
+        daymonth = day.substring(5,10);
+        day = daymonth + "-" + yr;
+        day = day.replace(/-/g, "/");
+
+        console.log(day);
+
+        // construct class string for specific card title
+        let j = (i / 8) + 1;
+        let cardTitle = ".ct" + j;
+        let cardName = ".card" + j;
+        $(cardTitle).text(day);
+
+
+        let temp = response.list[i].main.temp;
+        console.log("typeof temp = " + typeof(temp));
+        temp = temp.toFixed(0);
+        let humidity = response.list[i].main.humidity;
+        let wind = response.list[i].wind.speed;
+
+        let newTempP = $("<p>");
+        newTempP.text("Temp: " + temp + "°F");
+    
+        let newHumidityP = $("<p>");
+        newHumidityP.text("Humidity: " + humidity + "%");
+    
+        // create the img for the weather icon and give it the source for the correct icon
+        let newIcon = $("<img>");
+        let icon = response.list[i].weather[0].icon;
+        let iconURL = "http://openweathermap.org/img/wn/" + icon + ".png";
+        console.log(icon);
+        newIcon.attr("src", iconURL);
+
+
+        // append data to appropriate card
+        $(cardName).empty();
+        $(cardName).append(newIcon); 
+        $(cardName).append(newTempP);
+        $(cardName).append(newHumidityP);
+
+    }
+    
 
 }
 
@@ -112,8 +161,6 @@ $("#searchButton").on("click", function(event) {
 
 });
 
-// Adding a click event listener to all elements with a class of "sidebarBtn"
-$(document).on("click", ".sidebarBtn", updateFromSidebar);
 
 function updateFromSidebar() {
 
@@ -126,27 +173,36 @@ function updateFromSidebar() {
 function updatePage(city) {
     event.preventDefault();
 
+    // construct URL for current weather API request
     let weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial";
     
+    // send request for current weather data
     $.ajax({
         url: weatherQueryURL,
         method: "GET"
-      }).then(function(response) {
+    }).then(function(response) {
 
         console.log(response);
-    
+        
+        // pass returned data to function that will update that section of the dashboard
         displayCurrentWeather(response);
     
-      });
+    });
 
+    // construct URL for forecast API request
     let forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial";
 
-      $.ajax({
+    // send request for current weather data
+    $.ajax({
         url: forecastQueryURL,
         method: "GET"
-      }).then(function(response) {
+    }).then(function(response) {
     
+        // pass returned data to function that will update that section of the dashboard
         display5DayForecast(response);
     
-      });
+    });
 }
+
+// Adding a click event listener to all elements with a class of "sidebarBtn"
+$(document).on("click", ".sidebarBtn", updateFromSidebar);
