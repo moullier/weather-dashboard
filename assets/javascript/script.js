@@ -79,23 +79,24 @@ function displayCurrentWeather(response){
 
 }
 
+
+// pass in the latitude and longitude in order to get the UV from the API
 function displayUV(latitude, longitude) {
         // construct URL for UV API request
         let UVQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&APPID=7c1d14299c12aa7faada3a48e18af17b&units=imperial";
     
-        // send request for current weather data
+        // send request for UV data
         $.ajax({
             url: UVQueryURL,
             method: "GET"
         }).then(function(response) {
-    
-            console.log("Yo this is the UV stuff");
-            console.log(response);
             
+            // create a new button and give it the appropriate Bootstrap class for formatting
             let newButton = $("<button>");
             let UVValue = response.value;
             newButton.addClass("btn");
 
+            // color the button according to the UV level
             if(UVValue >= 0 && UVValue <= 2.5)
                 newButton.css("background-color","green");
             else if(UVValue > 2.5 && UVValue <= 5.5)
@@ -107,8 +108,7 @@ function displayUV(latitude, longitude) {
             else
                 newButton.css("background-color","violet");
                 
-                
-
+            // Add the UV value to the button, append the button to the div
             newButton.text(UVValue);
             $(".UVBody").empty();
             $(".UVBody").text("UV Index: ")
@@ -179,6 +179,8 @@ function populateSidebar() {
     console.log("cityArray.length = " + cityArray.length);
     console.log("cityArray = " + cityArray);
 
+    // empty the sidebar
+    $("#sidebarList").empty();
 
     if(cityArray.length == 0) {
         // populate sidebar with default cities
@@ -203,11 +205,21 @@ $("#searchButton").on("click", function(event) {
     let city = $("#cityInput").val().trim();
     console.log(city);
 
+    if(cityArray.length <= 9){
+        cityArray.unshift(city);
+    } else {
+        cityArray.pop();
+        cityArray.unshift(city);
+    }
+    
+    localStorage.setItem("cityList", JSON.stringify(cityArray));
+    populateSidebar();
+
     updatePage(city);
 
 });
 
-
+// calls updatePage, but passes in the city that was clicked from the sidebar
 function updateFromSidebar() {
 
     let city = $(this).attr("dataCity");
