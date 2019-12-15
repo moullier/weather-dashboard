@@ -19,16 +19,11 @@ body, html {
 #searchForm {
     margin-bottom: 15px;
 }
-/* .sidebar {
-    background-color: darkolivegreen;
-}
-
-
-
-.forecast {
-    background-color: lightseagreen;
-} */
 
 .sidebar {
     height: 100%;
+}
+
+#geolocate {
+    padding-bottom: 15px;
 }

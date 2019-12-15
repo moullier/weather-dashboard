@@ -6,9 +6,13 @@ This project is a basic weather dashboard.  It displays the current weather in a
 
 The weather data is gathered using the OpenWeather API (https://openweathermap.org/api).  I used AJAX to access the weather data for each requested city.  The dynamic parts of the web page are created in JQuery.  The page is styled and laid out using Bootstrap.  The search history is saved and loaded from localStorage.
 
+The page also uses the Geolocation API to pull the user's current location when they click on the "My Location" link on the sidebar.  If the browser can use geolocation and the user gives permission, it will populate the weather in their location.
+
 ## Resources
 
 This page provided the basic Javascript array methods: https://www.w3schools.com/js/js_array_methods.asp
+
+This page provided the information about the Geolocation API: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
 
 ## License
 
