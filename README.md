@@ -1,4 +1,6 @@
-# weather-dashboard
+# Weather Dashboard
+
+Hosted at https://moullier.github.io/weather-dashboard/
 
 ## Description
 
